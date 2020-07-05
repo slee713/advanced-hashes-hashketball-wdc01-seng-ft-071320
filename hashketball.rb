@@ -137,6 +137,7 @@ def num_points_scored(name)
       name == value
     end
   end
+
   away_player =
   game_hash[:away][:players].find do |index|
     index.find do |cat_key, value|
@@ -168,12 +169,13 @@ def shoe_size(name)
   end
   # binding.pry
   if home_player
-    points = home_player[:shoe]
+    shoe_size= home_player[:shoe]
   else
-    points = away_player[:shoe]
+    shoe_size= away_player[:shoe]
   # binding.pry
   end
-  points
+  shoe_size
+  # binding.pry
 end
 
 def team_colors(team_name)
@@ -183,23 +185,61 @@ def team_colors(team_name)
   end
 # binding.pry
   home_team[1][:colors]
-
-  # binding.pry
 end
 
 def team_names
   names = []
-  team = game_hash.find do |location, values|
-    values[:team_name]
+  game_hash.each do |key, value|
+    names.push(value[:team_name])
   end
-  binding.pry
+  names
 end
 
+
 def player_numbers(team)
+  jersey_num = []
+  if team == "Brooklyn Nets"
+    game_hash[:home][:players].each do |index|
+      jersey_num.push(index[:number])
+    end
+  elsif team == "Charlotte Hornets"
+  game_hash[:away][:players].each do |index|
+      jersey_num.push(index[:number])
+    end
+  end
+
+  jersey_num
 end
 
 def player_stats(name)
+  home_player =
+  game_hash[:home][:players].find do |index|
+    index.find do |cat_key, value|
+      name == value
+    end
+  end
+
+  away_player =
+  game_hash[:away][:players].find do |index|
+    index.find do |cat_key, value|
+      name == value
+    end
+  end
+  home_player ? home_player : away_player
+  # binding.pry
 end
 
 def big_shoe_rebounds
+  shoe_size = 0
+  rebounds = 0
+  game_hash.each do |side, value|
+    value[:players].each do |index|
+    if index[:shoe] > shoe_size
+      shoe_size = index[:shoe]
+      rebounds = index[:rebounds]
+    end
+  end
+end
+  rebounds
+
 end
